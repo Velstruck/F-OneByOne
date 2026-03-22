@@ -1,6 +1,7 @@
 import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
-import { Flag, LayoutDashboard, Trophy, Calendar } from "lucide-react";
+import { Flag, LayoutDashboard, Trophy, Calendar, Activity } from "lucide-react";
+import SeasonSelector from "@/components/dashboard/SeasonSelector";
 
 export default function DashboardLayout({
   children,
@@ -25,18 +26,23 @@ export default function DashboardLayout({
             <LayoutDashboard className="h-4 w-4" />
             Dashboard
           </Link>
-          <Link href="#" className="flex items-center gap-3 px-3 py-2 text-zinc-400 hover:text-white hover:bg-zinc-900 rounded-md transition-colors font-medium">
+          <Link href="/dashboard/race-analysis" className="flex items-center gap-3 px-3 py-2 text-zinc-400 hover:text-white hover:bg-zinc-900 rounded-md transition-colors font-medium">
+            <Activity className="h-4 w-4" />
+            Race Analysis
+          </Link>
+          <Link href="/dashboard/standings" className="flex items-center gap-3 px-3 py-2 text-zinc-400 hover:text-white hover:bg-zinc-900 rounded-md transition-colors font-medium">
             <Trophy className="h-4 w-4" />
             Standings
           </Link>
-          <Link href="#" className="flex items-center gap-3 px-3 py-2 text-zinc-400 hover:text-white hover:bg-zinc-900 rounded-md transition-colors font-medium">
+          <Link href="/dashboard/calendar" className="flex items-center gap-3 px-3 py-2 text-zinc-400 hover:text-white hover:bg-zinc-900 rounded-md transition-colors font-medium">
             <Calendar className="h-4 w-4" />
             Calendar
           </Link>
         </nav>
         
         <div className="p-4 border-t border-zinc-900">
-          <div className="flex items-center gap-3 px-3 py-2 bg-zinc-900 rounded-md">
+          <SeasonSelector />
+          <div className="mt-4 flex items-center gap-3 px-3 py-2 bg-zinc-900 rounded-md">
             <UserButton />
             <span className="text-sm font-medium text-zinc-300 ml-2">My Account</span>
           </div>
@@ -51,7 +57,10 @@ export default function DashboardLayout({
             <Flag className="h-6 w-6 text-red-600" />
             <span className="font-bold text-lg">F1 Pulse</span>
           </Link>
-          <UserButton />
+          <div className="flex items-center gap-3">
+            <SeasonSelector />
+            <UserButton />
+          </div>
         </header>
 
         {/* Content Area */}

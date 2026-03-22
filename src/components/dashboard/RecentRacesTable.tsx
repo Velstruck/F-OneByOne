@@ -17,14 +17,14 @@ interface Race {
 }
 
 export function RecentRacesTable({ races }: { races: Race[] }) {
-  // Show last 5 races that actually have results
-  const completedRaces = races.filter(r => r.podium && r.podium.length > 0).slice(-5).reverse();
+  // Show all completed races, latest first
+  const completedRaces = races.filter(r => r.podium && r.podium.length > 0).reverse();
 
   return (
     <Card className="bg-zinc-950 border-zinc-800 text-white w-full">
       <CardHeader>
-        <CardTitle>Recent Races</CardTitle>
-        <CardDescription className="text-zinc-400">Podium results for the latest Grand Prixs</CardDescription>
+        <CardTitle>Season Races</CardTitle>
+        <CardDescription className="text-zinc-400">Podium results for all completed Grand Prixs</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="rounded-md border border-zinc-800">

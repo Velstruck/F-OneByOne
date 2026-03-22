@@ -1,22 +1,46 @@
 import { NextResponse } from 'next/server';
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
-    const res = await fetch('https://api.jolpi.ca/ergast/f1/2026/results/?limit=1000&format=json', {
-      next: { revalidate: 3600 }
-    });
+    const { searchParams } = new URL(req.url);
+    const season = searchParams.get('season') || '2026';
+
+    const limit = 100;
+    let offset = 0;
+    let total = 0;
+    let isFirst = true;
+    let allRaces: any[] = [];
+
+    while (isFirst || offset < total) {
+      const res = await fetch(`https://api.jolpi.ca/ergast/f1/${season}/results.json?limit=${limit}&offset=${offset}`, {
+        next: { revalidate: 3600 }
+      });
+      if (!res.ok) throw new Error('API Error');
+      
+      const data = await res.json();
+      const races = data?.MRData?.RaceTable?.Races || [];
+      
+      races.forEach((race: any) => {
+        const existingRace = allRaces.find((r) => r.round === race.round);
+        if (existingRace) {
+          existingRace.Results = [...(existingRace.Results || []), ...(race.Results || [])];
+        } else {
+          allRaces.push(race);
+        }
+      });
+      
+      const parsedTotal = parseInt(data?.MRData?.total || '0', 10);
+      total = isNaN(parsedTotal) ? 0 : parsedTotal;
+      
+      isFirst = false;
+      offset += limit;
+    }
     
-    if (!res.ok) throw new Error('API Error');
-    const data = await res.json();
-    const races = data?.MRData?.RaceTable?.Races || [];
-    
-    // Convert deeply nested results to flat array for recent races table
-    // For line chart of points accumulation, we can compute running totals here.
-    
+    // Process the recursively merged array
     const constructorTotals: Record<string, number> = {};
     const accumulationChartData: any[] = [];
     
-    const formattedRaces = races.map((race: any) => {
+    const formattedRaces = allRaces.map((race: any) => {
       const round = parseInt(race.round, 10);
       const raceName = race.raceName;
       
@@ -26,7 +50,6 @@ export async function GET() {
         const constructorName = r.Constructor.name;
         const points = parseFloat(r.points);
         
-        // Accumulate points
         if (!constructorTotals[constructorName]) constructorTotals[constructorName] = 0;
         constructorTotals[constructorName] += points;
         
@@ -39,7 +62,6 @@ export async function GET() {
         };
       }) || [];
       
-      // Snapshot standard constructor points after this race
       Object.keys(constructorTotals).forEach(key => {
         chartPoint[key] = constructorTotals[key];
       });

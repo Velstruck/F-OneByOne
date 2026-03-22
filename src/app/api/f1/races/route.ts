@@ -1,8 +1,11 @@
 import { NextResponse } from 'next/server';
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
-    const res = await fetch('https://api.jolpi.ca/ergast/f1/2026/races/?format=json', {
+    const { searchParams } = new URL(req.url);
+    const season = searchParams.get('season') || '2026';
+
+    const res = await fetch(`https://api.jolpi.ca/ergast/f1/${season}/races/?format=json`, {
       next: { revalidate: 3600 }
     });
     

@@ -4,32 +4,37 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Trophy, Users, Flag } from "lucide-react";
 import { headers } from "next/headers";
 
-async function getStandings() {
+async function getStandings(season: string) {
   const host = (await headers()).get('host');
   const prot = process.env.NODE_ENV === 'development' ? 'http' : 'https';
-  const res = await fetch(`${prot}://${host}/api/f1/standings`, { next: { revalidate: 3600 } });
+  const res = await fetch(`${prot}://${host}/api/f1/standings?season=${season}`, { next: { revalidate: 3600 } });
   if (!res.ok) return [];
   return res.json();
 }
 
-async function getResults() {
+async function getResults(season: string) {
   const host = (await headers()).get('host');
   const prot = process.env.NODE_ENV === 'development' ? 'http' : 'https';
-  const res = await fetch(`${prot}://${host}/api/f1/results`, { next: { revalidate: 3600 } });
+  const res = await fetch(`${prot}://${host}/api/f1/results?season=${season}`, { next: { revalidate: 3600 } });
   if (!res.ok) return { races: [], accumulation: [] };
   return res.json();
 }
 
-export default async function DashboardPage() {
-  const standings = await getStandings();
-  const resultsData = await getResults();
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>
+
+export default async function DashboardPage(props: { searchParams: SearchParams }) {
+  const searchParams = await props.searchParams;
+  const season = typeof searchParams.season === 'string' ? searchParams.season : '2026';
+
+  const standings = await getStandings(season);
+  const resultsData = await getResults(season);
   
   const topConstructor = standings.length > 0 ? standings[0] : null;
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-white mb-2">Dashboard</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-white mb-2">Dashboard ({season})</h1>
         <p className="text-zinc-400">Welcome to your Formula 1 command center.</p>
       </div>
 
@@ -54,7 +59,7 @@ export default async function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{resultsData.races.length}</div>
-            <p className="text-xs text-zinc-400 mt-1">2026 Season Calendar</p>
+            <p className="text-xs text-zinc-400 mt-1">{season} Season Calendar</p>
           </CardContent>
         </Card>
 
