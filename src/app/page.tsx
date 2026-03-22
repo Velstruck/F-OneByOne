@@ -1,7 +1,8 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { BarChart3, Flag, Trophy, Target } from 'lucide-react';
+import { BarChart3, Trophy, Target } from 'lucide-react';
 import { auth } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
 
@@ -18,8 +19,8 @@ export default async function LandingPage() {
         <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
           <div className="flex lg:flex-1">
             <Link href="/" className="-m-1.5 p-1.5 flex items-center gap-2">
-              <div className="bg-red-600 p-2 rounded-lg">
-                <Flag className="h-6 w-6 text-white" />
+              <div className="p-2 rounded-lg flex items-center justify-center">
+                <Image src="/onebyone.png" alt="F-OneByOne Logo" width={50} height={50} priority  />
               </div>
               <span className="font-bold text-xl tracking-tight">F-OneByOne</span>
             </Link>

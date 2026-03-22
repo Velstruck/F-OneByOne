@@ -1,6 +1,7 @@
 import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
-import { Flag, LayoutDashboard, Trophy, Calendar, Activity } from "lucide-react";
+import Image from "next/image";
+import { LayoutDashboard, Trophy, Calendar, Activity } from "lucide-react";
 import SeasonSelector from "@/components/dashboard/SeasonSelector";
 
 export default function DashboardLayout({
@@ -14,8 +15,8 @@ export default function DashboardLayout({
       <aside className="w-64 border-r border-zinc-900 bg-zinc-950 hidden md:flex flex-col">
         <div className="p-6">
           <Link href="/" className="flex items-center gap-2">
-            <div className="bg-red-600 p-2 rounded-lg shadow-lg shadow-red-600/20">
-              <Flag className="h-5 w-5 text-white" />
+            <div className="p-2 rounded-lg flex items-center justify-center">
+              <Image src="/onebyone.png" alt="F-OneByOne Logo" width={50} height={50} priority />
             </div>
             <span className="font-bold text-lg tracking-tight">F-OneByOne</span>
           </Link>
@@ -54,7 +55,7 @@ export default function DashboardLayout({
         {/* Mobile Header */}
         <header className="md:hidden flex items-center justify-between p-4 border-b border-zinc-900 bg-zinc-950">
           <Link href="/" className="flex items-center gap-2">
-            <Flag className="h-6 w-6 text-red-600" />
+            <Image src="/favicon.svg" alt="F-OneByOne Logo" width={24} height={24} priority className="dark:invert-0" />
             <span className="font-bold text-lg">F-OneByOne</span>
           </Link>
           <div className="flex items-center gap-3">
