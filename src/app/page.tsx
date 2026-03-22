@@ -47,7 +47,7 @@ export default async function LandingPage() {
             <div className="mx-auto max-w-2xl text-center">
               <div className="mb-8 flex justify-center">
                 <div className="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-400 ring-1 ring-white/10 hover:ring-white/20 items-center">
-                  Announcing our Next-Gen F1 Analytics.{' '}
+                  Next-Gen F1 Analytics {' '}
                   <Link href="/sign-up" className="font-semibold text-red-500 hover:text-red-400 pl-2">
                     <span className="absolute inset-0" aria-hidden="true" />
                     Read more <span aria-hidden="true">&rarr;</span>
