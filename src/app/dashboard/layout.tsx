@@ -17,7 +17,7 @@ export default function DashboardLayout({
             <div className="bg-red-600 p-2 rounded-lg shadow-lg shadow-red-600/20">
               <Flag className="h-5 w-5 text-white" />
             </div>
-            <span className="font-bold text-lg tracking-tight">F1 Pulse</span>
+            <span className="font-bold text-lg tracking-tight">F-OneByOne</span>
           </Link>
         </div>
         
@@ -55,7 +55,7 @@ export default function DashboardLayout({
         <header className="md:hidden flex items-center justify-between p-4 border-b border-zinc-900 bg-zinc-950">
           <Link href="/" className="flex items-center gap-2">
             <Flag className="h-6 w-6 text-red-600" />
-            <span className="font-bold text-lg">F1 Pulse</span>
+            <span className="font-bold text-lg">F-OneByOne</span>
           </Link>
           <div className="flex items-center gap-3">
             <SeasonSelector />

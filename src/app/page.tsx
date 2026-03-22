@@ -21,7 +21,7 @@ export default async function LandingPage() {
               <div className="bg-red-600 p-2 rounded-lg">
                 <Flag className="h-6 w-6 text-white" />
               </div>
-              <span className="font-bold text-xl tracking-tight">F1 Pulse</span>
+              <span className="font-bold text-xl tracking-tight">F-OneByOne</span>
             </Link>
           </div>
           <div className="flex flex-1 justify-end gap-4">
@@ -57,7 +57,7 @@ export default async function LandingPage() {
                 The apex of <span className="text-red-600">Formula 1</span> intelligence
               </h1>
               <p className="mt-6 text-lg leading-8 text-gray-400">
-                Immerse yourself in real-time telemetry, constructor stand-offs, and driver insights. F1 Pulse delivers beautifully designed charts and deep analytical insights for the modern motorsport enthusiast.
+                Immerse yourself in real-time telemetry, constructor stand-offs, and driver insights. F-OneByOne delivers beautifully designed charts and deep analytical insights for the modern motorsport enthusiast.
               </p>
               <div className="mt-10 flex items-center justify-center gap-x-6">
                 <Link href="/sign-up">
