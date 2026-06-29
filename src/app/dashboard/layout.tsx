@@ -1,7 +1,8 @@
+import { Suspense } from "react";
 import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import Image from "next/image";
-import { LayoutDashboard, Trophy, Calendar, Activity } from "lucide-react";
+import { DashboardSidebarNav } from "@/components/dashboard/DashboardSidebarNav";
 import SeasonSelector from "@/components/dashboard/SeasonSelector";
 
 export default function DashboardLayout({
@@ -22,27 +23,12 @@ export default function DashboardLayout({
           </Link>
         </div>
         
-        <nav className="flex-1 px-4 space-y-2 mt-4">
-          <Link href="/dashboard" className="flex items-center gap-3 px-3 py-2 bg-red-600/10 text-red-500 rounded-md transition-colors font-medium">
-            <LayoutDashboard className="h-4 w-4" />
-            Dashboard
-          </Link>
-          <Link href="/dashboard/race-analysis" className="flex items-center gap-3 px-3 py-2 text-zinc-400 hover:text-white hover:bg-zinc-900 rounded-md transition-colors font-medium">
-            <Activity className="h-4 w-4" />
-            Race Analysis
-          </Link>
-          <Link href="/dashboard/standings" className="flex items-center gap-3 px-3 py-2 text-zinc-400 hover:text-white hover:bg-zinc-900 rounded-md transition-colors font-medium">
-            <Trophy className="h-4 w-4" />
-            Standings
-          </Link>
-          <Link href="/dashboard/calendar" className="flex items-center gap-3 px-3 py-2 text-zinc-400 hover:text-white hover:bg-zinc-900 rounded-md transition-colors font-medium">
-            <Calendar className="h-4 w-4" />
-            Calendar
-          </Link>
-        </nav>
+        <DashboardSidebarNav />
         
         <div className="p-4 border-t border-zinc-900">
-          <SeasonSelector />
+          <Suspense fallback={<SeasonSelectorFallback />}>
+            <SeasonSelector />
+          </Suspense>
           <div className="mt-4 flex items-center gap-3 px-3 py-2 bg-zinc-900 rounded-md">
             <UserButton />
             <span className="text-sm font-medium text-zinc-300 ml-2">My Account</span>
@@ -59,7 +45,9 @@ export default function DashboardLayout({
             <span className="font-bold text-lg">F-OneByOne</span>
           </Link>
           <div className="flex items-center gap-3">
-            <SeasonSelector />
+            <Suspense fallback={<SeasonSelectorFallback compact />}>
+              <SeasonSelector />
+            </Suspense>
             <UserButton />
           </div>
         </header>
@@ -69,6 +57,19 @@ export default function DashboardLayout({
           {children}
         </div>
       </main>
+    </div>
+  );
+}
+
+function SeasonSelectorFallback({ compact = false }: { compact?: boolean }) {
+  return (
+    <div
+      className={`flex items-center gap-2 rounded-md border border-zinc-800 bg-zinc-900/80 ${
+        compact ? "h-8 px-3" : "px-3 py-2"
+      }`}
+    >
+      <div className="h-3 w-12 rounded-full bg-zinc-800" />
+      <div className={`${compact ? "h-8 w-24" : "h-8 w-[100px]"} rounded-md bg-zinc-800`} />
     </div>
   );
 }
