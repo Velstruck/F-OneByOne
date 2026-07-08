@@ -1,130 +1,205 @@
-import Link from 'next/link';
-import Image from 'next/image';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { BarChart3, Trophy, Target } from 'lucide-react';
-import { auth } from '@clerk/nextjs/server';
-import { redirect } from 'next/navigation';
+import Link from "next/link";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
+
+import { Navbar } from "@/components/landing/Navbar";
+import { HeroStage } from "@/components/landing/HeroStage";
+import { StatsBar } from "@/components/landing/StatsBar";
+import { SplitDataSection } from "@/components/landing/SplitDataSection";
+import { TelemetryFeatureCard } from "@/components/landing/TelemetryFeatureCard";
+import { Footer } from "@/components/landing/Footer";
+
+import { ThrottleBrakeWave } from "@/components/landing/svg/ThrottleBrakeWave";
+import { SpeedGauge } from "@/components/landing/svg/SpeedGauge";
+import { LapTimeGrid } from "@/components/landing/svg/LapTimeGrid";
+import { AeroFlowViz } from "@/components/landing/svg/AeroFlowViz";
+import { TireCompoundViz } from "@/components/landing/svg/TireCompoundViz";
+import { CircuitTrace } from "@/components/landing/svg/CircuitTrace";
 
 export default async function LandingPage() {
   const { userId } = await auth();
   if (userId) {
-    redirect('/dashboard');
+    redirect("/dashboard");
   }
 
   return (
-    <div className="min-h-screen bg-black text-white selection:bg-red-500 selection:text-white">
-      {/* Header */}
-      <header className="absolute inset-x-0 top-0 z-50">
-        <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
-          <div className="flex lg:flex-1">
-            <Link href="/" className="-m-1.5 p-1.5 flex items-center gap-2">
-              <div className="p-2 rounded-lg flex items-center justify-center">
-                <Image src="/onebyone.png" alt="F-OneByOne Logo" width={50} height={50} priority  />
-              </div>
-              <span className="font-bold text-xl tracking-tight">F-OneByOne</span>
-            </Link>
-          </div>
-          <div className="flex flex-1 justify-end gap-4">
-            <Link href="/sign-in">
-              <Button variant="ghost" className="text-gray-300 hover:text-white hover:bg-white/10">Log in</Button>
-            </Link>
+    <div className="min-h-screen" style={{ backgroundColor: "#ffffff" }}>
+      {/* ── Sticky Navigation ── */}
+      <Navbar />
+
+      {/* ── 1. Carbon Hero Stage ── */}
+      <HeroStage />
+
+      {/* ── 2. Stats Bar ── */}
+      <StatsBar />
+
+      {/* ── 3. Split Data Section — Championship Analytics ── */}
+      <SplitDataSection
+        id="analytics"
+        surface="white"
+        headline="Championship Analytics"
+        body="Track the constructor championship round-by-round with interactive telemetry charts. Visualize points distribution, race pace trends, and season momentum shifts with precision-engineered data grids."
+        buttonLabel="Analyze Season"
+        buttonColor="cyan"
+        linkLabel="View Documentation"
+      >
+        <ThrottleBrakeWave className="w-full h-auto" />
+      </SplitDataSection>
+
+      {/* ── 4. Split Data Section — Real-Time Telemetry (reversed) ── */}
+      <SplitDataSection
+        id="telemetry"
+        surface="mist"
+        reversed
+        headline="Real-Time Telemetry"
+        body="Stream live throttle, brake, and steering data at 240Hz sample rates. Overlay driver traces, compare sector performances, and identify the decisive milliseconds that separate podium from midfield."
+        buttonLabel="Connect Live Feed"
+        buttonColor="green"
+        linkLabel="API Reference"
+      >
+        <SpeedGauge className="w-full h-auto max-w-[300px] mx-auto" />
+      </SplitDataSection>
+
+      {/* ── 5. Tinted Feature Card Grid (2-column) ── */}
+      <section
+        id="features"
+        style={{ backgroundColor: "#ffffff" }}
+      >
+        <div
+          className="mx-auto grid grid-cols-1 md:grid-cols-2"
+          style={{
+            maxWidth: 1200,
+            gap: 24,
+            padding: "96px 32px",
+          }}
+        >
+          {/* Paddock Scarlet — Fastest Lap Metrics */}
+          <TelemetryFeatureCard
+            tint="scarlet"
+            headline="Fastest Lap Metrics"
+            body="Dissect the fastest lap of every session. Sector-by-sector breakdown with speed trap data, tire compound analysis, and historical comparisons across seasons."
+            buttonLabel="Parse Laps"
+            linkLabel="View Raw JSON"
+          >
+            <AeroFlowViz className="w-full h-auto" />
+          </TelemetryFeatureCard>
+
+          {/* Apex Teal — Aero Balance Analysis */}
+          <TelemetryFeatureCard
+            tint="teal"
+            headline="Aero Balance Analysis"
+            body="Wind-tunnel precision meets real-world performance. Analyze downforce distribution, drag coefficients, and DRS effectiveness across every circuit configuration."
+            buttonLabel="Analyze Telemetry"
+            linkLabel="Read Methodology"
+          >
+            <TireCompoundViz className="w-full h-auto" />
+          </TelemetryFeatureCard>
+        </div>
+      </section>
+
+      {/* ── 6. Split Data Section — Driver Standings ── */}
+      <SplitDataSection
+        id="standings"
+        surface="mist"
+        headline="Driver Standings"
+        body="Keep your favorite drivers in sight with personalized dashboards. Compare performance trajectories, championship points progression, and head-to-head race data with granular filtering."
+        buttonLabel="Track Drivers"
+        buttonColor="yellow"
+        linkLabel="Compare Drivers"
+      >
+        <LapTimeGrid className="w-full h-auto" />
+      </SplitDataSection>
+
+      {/* ── 7. Full-Width Tinted Feature Card — Championship Legacy (Gold) ── */}
+      <section style={{ backgroundColor: "#ffffff" }}>
+        <div
+          className="mx-auto"
+          style={{ maxWidth: 1200, padding: "0 32px 96px" }}
+        >
+          <TelemetryFeatureCard
+            tint="gold"
+            headline="Championship Legacy Database"
+            body="Access 70+ years of Formula 1 championship data. Every constructor, every driver, every race — indexed, searchable, and ready for deep analytical queries. From Fangio to the present grid."
+            buttonLabel="Explore Legacy"
+            linkLabel="Browse Archives"
+          >
+            <CircuitTrace className="w-full h-auto" />
+          </TelemetryFeatureCard>
+        </div>
+      </section>
+
+      {/* ── 8. Final CTA Section ── */}
+      <section style={{ backgroundColor: "#0d0f12" }}>
+        <div
+          className="mx-auto flex flex-col items-center text-center"
+          style={{
+            maxWidth: 1200,
+            padding: "96px 32px",
+          }}
+        >
+          <h2
+            className="font-heading"
+            style={{
+              fontSize: "clamp(28px, 5vw, 46px)",
+              lineHeight: 1.2,
+              letterSpacing: "0.92px",
+              color: "#ffffff",
+              margin: 0,
+              marginBottom: 16,
+            }}
+          >
+            Ready to Initialize?
+          </h2>
+          <p
+            className="font-sans"
+            style={{
+              fontSize: 16,
+              lineHeight: 1.4,
+              color: "#8a9698",
+              maxWidth: 480,
+              marginBottom: 32,
+            }}
+          >
+            Connect to the f-onebyone data engine and unlock the full depth of
+            Formula 1 analytics. Zero configuration required.
+          </p>
+          <div className="flex items-center gap-4 flex-wrap justify-center">
             <Link href="/sign-up">
-              <Button className="bg-red-600 hover:bg-red-700 text-white border-0">Get Started</Button>
+              <button
+                className="font-sans cursor-pointer"
+                style={{
+                  fontSize: 16,
+                  fontWeight: 500,
+                  padding: "12px 27px",
+                  borderRadius: 2,
+                  border: "none",
+                  backgroundColor: "#00a650",
+                  color: "#ffffff",
+                  letterSpacing: "0.04em",
+                }}
+              >
+                Initialize Telemetry
+              </button>
+            </Link>
+            <Link
+              href="#"
+              className="font-sans"
+              style={{
+                fontSize: 16,
+                fontWeight: 400,
+                color: "#00a650",
+                textDecoration: "none",
+                letterSpacing: "0.04em",
+              }}
+            >
+              Schedule Demo →
             </Link>
           </div>
-        </nav>
-      </header>
+        </div>
+      </section>
 
-      {/* Hero Section */}
-      <div className="relative isolate pt-14">
-        <div className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80" aria-hidden="true">
-          <div className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff4d4d] to-[#ff0000] opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]" style={{clipPath: 'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)'}}></div>
-        </div>
-        
-        <div className="py-24 sm:py-32 lg:pb-40">
-          <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <div className="mx-auto max-w-2xl text-center">
-              <div className="mb-8 flex justify-center">
-                <div className="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-400 ring-1 ring-white/10 hover:ring-white/20 items-center">
-                  Next-Gen F1 Analytics {' '}
-                  <Link href="/sign-up" className="font-semibold text-red-500 hover:text-red-400 pl-2">
-                    <span className="absolute inset-0" aria-hidden="true" />
-                    Read more <span aria-hidden="true">&rarr;</span>
-                  </Link>
-                </div>
-              </div>
-              <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-6xl">
-                The apex of <span className="text-red-600">Formula 1</span> intelligence
-              </h1>
-              <p className="mt-6 text-lg leading-8 text-gray-400">
-                Immerse yourself in real-time telemetry, constructor stand-offs, and driver insights. F-OneByOne delivers beautifully designed charts and deep analytical insights for the modern motorsport enthusiast.
-              </p>
-              <div className="mt-10 flex items-center justify-center gap-x-6">
-                <Link href="/sign-up">
-                  <Button size="lg" className="bg-red-600 hover:bg-red-700 text-white rounded-full px-8 shadow-lg shadow-red-600/30 transition-all hover:scale-105">
-                    Start Your Engines
-                  </Button>
-                </Link>
-                <Link href="#features" className="text-sm font-semibold leading-6 text-gray-300 hover:text-white transition-colors">
-                  View Features <span aria-hidden="true">→</span>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Feature Section */}
-      <div id="features" className="py-24 sm:py-32 bg-zinc-900/50">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl lg:text-center">
-            <h2 className="text-base font-semibold leading-7 text-red-500">Accelerated Insights</h2>
-            <p className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              Everything you need to track the season
-            </p>
-          </div>
-          <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
-            <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3">
-              <Card className="bg-zinc-950 border-zinc-800 text-white">
-                <CardHeader>
-                  <Trophy className="h-8 w-8 text-red-500 mb-4" />
-                  <CardTitle>Championship Tracking</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-zinc-400">
-                    Track the constructor championship round-by-round with interactive line charts to see who is dominating the season.
-                  </CardDescription>
-                </CardContent>
-              </Card>
-              
-              <Card className="bg-zinc-950 border-zinc-800 text-white">
-                <CardHeader>
-                  <BarChart3 className="h-8 w-8 text-red-500 mb-4" />
-                  <CardTitle>Race Results</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-zinc-400">
-                    Deep dive into individual race results, finishing orders, and points distribution after every grand prix.
-                  </CardDescription>
-                </CardContent>
-              </Card>
-              
-              <Card className="bg-zinc-950 border-zinc-800 text-white">
-                <CardHeader>
-                  <Target className="h-8 w-8 text-red-500 mb-4" />
-                  <CardTitle>Driver Standings</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-zinc-400">
-                    Keep your favorite drivers in sight with personalized dashboards and favoriting features.
-                  </CardDescription>
-                </CardContent>
-              </Card>
-            </dl>
-          </div>
-        </div>
-      </div>
+      {/* ── 9. Footer ── */}
+      <Footer />
     </div>
   );
 }

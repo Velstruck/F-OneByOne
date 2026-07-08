@@ -1,23 +1,24 @@
 import type { Metadata } from "next";
-import { Racing_Sans_One, Titillium_Web } from "next/font/google";
+import { Space_Grotesk, Outfit } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 
-const racingSans = Racing_Sans_One({
-  variable: "--font-racing",
-  weight: "400",
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-technical-grotesk",
   subsets: ["latin"],
+  weight: ["400", "500", "700"],
 });
 
-const titilliumWeb = Titillium_Web({
-  variable: "--font-titillium",
-  weight: ["200", "300", "400", "600", "700", "900"],
+const outfit = Outfit({
+  variable: "--font-velocity-display",
   subsets: ["latin"],
+  weight: ["700"],
 });
 
 export const metadata: Metadata = {
-  title: "F-OneByOne",
-  description: "OneByOne Formula 1",
+  title: "F-OneByOne — Formula 1 Telemetry & Analytics Platform",
+  description:
+    "Premium real-time F1 telemetry, championship analytics, and driver performance data. Your private paddock data engine with ultra-precise aerodynamic analysis.",
 };
 
 export default function RootLayout({
@@ -29,7 +30,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html
         lang="en"
-        className={`${titilliumWeb.variable} ${racingSans.variable} h-full antialiased`}
+        className={`${spaceGrotesk.variable} ${outfit.variable} h-full antialiased`}
         suppressHydrationWarning
       >
         <body className="min-h-full flex flex-col" suppressHydrationWarning>
