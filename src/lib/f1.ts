@@ -1,21 +1,30 @@
 import { SEASON_DATA_REVALIDATE_SECONDS } from "@/lib/cache";
 
 async function fetchJson(url: string) {
-  const res = await fetch(url, {
-    next: { revalidate: SEASON_DATA_REVALIDATE_SECONDS },
-  });
+  try {
+    const res = await fetch(url, {
+      next: { revalidate: SEASON_DATA_REVALIDATE_SECONDS },
+    });
 
-  if (!res.ok) {
-    throw new Error(`Request failed: ${res.status}`);
+    if (!res.ok) {
+      return null;
+    }
+
+    return res.json();
+  } catch {
+    return null;
   }
-
-  return res.json();
 }
 
 export async function getConstructorStandings(season: string) {
   const data = await fetchJson(
     `https://api.jolpi.ca/ergast/f1/${season}/constructorstandings/?format=json`,
   );
+
+  if (!data) {
+    return [];
+  }
+
   const list = data?.MRData?.StandingsTable?.StandingsLists?.[0]?.ConstructorStandings || [];
 
   return list.map((item: any) => ({
@@ -32,6 +41,11 @@ export async function getDriverStandings(season: string) {
   const data = await fetchJson(
     `https://api.jolpi.ca/ergast/f1/${season}/driverstandings/?format=json`,
   );
+
+  if (!data) {
+    return [];
+  }
+
   const list = data?.MRData?.StandingsTable?.StandingsLists?.[0]?.DriverStandings || [];
 
   return list.map((item: any) => ({
@@ -48,6 +62,11 @@ export async function getDriverStandings(season: string) {
 
 export async function getRaces(season: string) {
   const data = await fetchJson(`https://api.jolpi.ca/ergast/f1/${season}/races/?format=json`);
+
+  if (!data) {
+    return [];
+  }
+
   const races = data?.MRData?.RaceTable?.Races || [];
 
   return races.map((race: any) => ({
@@ -71,6 +90,14 @@ export async function getResults(season: string) {
     const data = await fetchJson(
       `https://api.jolpi.ca/ergast/f1/${season}/results.json?limit=${limit}&offset=${offset}`,
     );
+
+    if (!data) {
+      return {
+        races: [],
+        accumulation: [],
+      };
+    }
+
     const races = data?.MRData?.RaceTable?.Races || [];
 
     races.forEach((race: any) => {
@@ -143,6 +170,11 @@ export async function getLaps(season: string, round: string) {
     const data = await fetchJson(
       `https://api.jolpi.ca/ergast/f1/${season}/${round}/laps.json?limit=${limit}&offset=${offset}`,
     );
+
+    if (!data) {
+      return [];
+    }
+
     const races = data?.MRData?.RaceTable?.Races || [];
 
     if (races.length > 0 && races[0].Laps) {
@@ -177,6 +209,11 @@ export async function getPitstops(season: string, round: string) {
     const data = await fetchJson(
       `https://api.jolpi.ca/ergast/f1/${season}/${round}/pitstops.json?limit=${limit}&offset=${offset}`,
     );
+
+    if (!data) {
+      return [];
+    }
+
     const races = data?.MRData?.RaceTable?.Races || [];
 
     if (races.length > 0 && races[0].PitStops) {
