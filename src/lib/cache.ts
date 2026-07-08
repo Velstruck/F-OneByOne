@@ -1,0 +1,1 @@
+export const SEASON_DATA_REVALIDATE_SECONDS = 60 * 60 * 24 * 3;

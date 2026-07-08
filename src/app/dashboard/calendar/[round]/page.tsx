@@ -4,11 +4,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LapPositionChart } from "@/components/dashboard/LapPositionChart";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { SEASON_DATA_REVALIDATE_SECONDS } from "@/lib/cache";
 
 async function getLaps(season: string, round: string) {
   const host = (await headers()).get('host');
   const prot = process.env.NODE_ENV === 'development' ? 'http' : 'https';
-  const res = await fetch(`${prot}://${host}/api/f1/laps?season=${season}&round=${round}`, { next: { revalidate: 3600 } });
+  const res = await fetch(`${prot}://${host}/api/f1/laps?season=${season}&round=${round}`, { next: { revalidate: SEASON_DATA_REVALIDATE_SECONDS } });
   if (!res.ok) return [];
   return res.json();
 }
@@ -16,7 +17,7 @@ async function getLaps(season: string, round: string) {
 async function getPitstops(season: string, round: string) {
   const host = (await headers()).get('host');
   const prot = process.env.NODE_ENV === 'development' ? 'http' : 'https';
-  const res = await fetch(`${prot}://${host}/api/f1/pitstops?season=${season}&round=${round}`, { next: { revalidate: 3600 } });
+  const res = await fetch(`${prot}://${host}/api/f1/pitstops?season=${season}&round=${round}`, { next: { revalidate: SEASON_DATA_REVALIDATE_SECONDS } });
   if (!res.ok) return [];
   return res.json();
 }
@@ -67,7 +68,7 @@ export default async function RaceDetail(props: PageProps) {
             <Table>
               <TableHeader>
                 <TableRow className="border-zinc-800 hover:bg-transparent">
-                  <TableHead className="w-[80px] text-zinc-400 text-center">Stop</TableHead>
+                  <TableHead className="w-20 text-zinc-400 text-center">Stop</TableHead>
                   <TableHead className="text-zinc-400">Driver</TableHead>
                   <TableHead className="text-zinc-400">Lap</TableHead>
                   <TableHead className="text-zinc-400">Time of Day</TableHead>

@@ -1,11 +1,12 @@
 import { headers } from "next/headers";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { SEASON_DATA_REVALIDATE_SECONDS } from "@/lib/cache";
 
 async function getConstructorStandings(season: string) {
   const host = (await headers()).get('host');
   const prot = process.env.NODE_ENV === 'development' ? 'http' : 'https';
-  const res = await fetch(`${prot}://${host}/api/f1/standings?season=${season}`, { next: { revalidate: 3600 } });
+  const res = await fetch(`${prot}://${host}/api/f1/standings?season=${season}`, { next: { revalidate: SEASON_DATA_REVALIDATE_SECONDS } });
   if (!res.ok) return [];
   return res.json();
 }
@@ -13,7 +14,7 @@ async function getConstructorStandings(season: string) {
 async function getDriverStandings(season: string) {
   const host = (await headers()).get('host');
   const prot = process.env.NODE_ENV === 'development' ? 'http' : 'https';
-  const res = await fetch(`${prot}://${host}/api/f1/driver-standings?season=${season}`, { next: { revalidate: 3600 } });
+  const res = await fetch(`${prot}://${host}/api/f1/driver-standings?season=${season}`, { next: { revalidate: SEASON_DATA_REVALIDATE_SECONDS } });
   if (!res.ok) return [];
   return res.json();
 }
@@ -45,7 +46,7 @@ export default async function StandingsPage(props: { searchParams: SearchParams 
             <Table>
               <TableHeader>
                 <TableRow className="border-zinc-800 hover:bg-transparent">
-                  <TableHead className="w-[80px] text-zinc-400">Pos</TableHead>
+                  <TableHead className="w-20 text-zinc-400">Pos</TableHead>
                   <TableHead className="text-zinc-400">Driver</TableHead>
                   <TableHead className="text-zinc-400">Team</TableHead>
                   <TableHead className="text-right text-zinc-400">Pts</TableHead>
@@ -73,7 +74,7 @@ export default async function StandingsPage(props: { searchParams: SearchParams 
             <Table>
               <TableHeader>
                 <TableRow className="border-zinc-800 hover:bg-transparent">
-                  <TableHead className="w-[80px] text-zinc-400">Pos</TableHead>
+                  <TableHead className="w-20 text-zinc-400">Pos</TableHead>
                   <TableHead className="text-zinc-400">Team</TableHead>
                   <TableHead className="text-zinc-400">Wins</TableHead>
                   <TableHead className="text-right text-zinc-400">Pts</TableHead>

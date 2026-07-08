@@ -3,11 +3,12 @@ import { RecentRacesTable } from "@/components/dashboard/RecentRacesTable";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Trophy, Users, Flag } from "lucide-react";
 import { headers } from "next/headers";
+import { SEASON_DATA_REVALIDATE_SECONDS } from "@/lib/cache";
 
 async function getStandings(season: string) {
   const host = (await headers()).get('host');
   const prot = process.env.NODE_ENV === 'development' ? 'http' : 'https';
-  const res = await fetch(`${prot}://${host}/api/f1/standings?season=${season}`, { next: { revalidate: 3600 } });
+  const res = await fetch(`${prot}://${host}/api/f1/standings?season=${season}`, { next: { revalidate: SEASON_DATA_REVALIDATE_SECONDS } });
   if (!res.ok) return [];
   return res.json();
 }
@@ -15,7 +16,7 @@ async function getStandings(season: string) {
 async function getResults(season: string) {
   const host = (await headers()).get('host');
   const prot = process.env.NODE_ENV === 'development' ? 'http' : 'https';
-  const res = await fetch(`${prot}://${host}/api/f1/results?season=${season}`, { next: { revalidate: 3600 } });
+  const res = await fetch(`${prot}://${host}/api/f1/results?season=${season}`, { next: { revalidate: SEASON_DATA_REVALIDATE_SECONDS } });
   if (!res.ok) return { races: [], accumulation: [] };
   return res.json();
 }

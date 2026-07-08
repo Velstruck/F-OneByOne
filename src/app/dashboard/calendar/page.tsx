@@ -2,11 +2,12 @@ import { headers } from "next/headers";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
+import { SEASON_DATA_REVALIDATE_SECONDS } from "@/lib/cache";
 
 async function getRaces(season: string) {
   const host = (await headers()).get('host');
   const prot = process.env.NODE_ENV === 'development' ? 'http' : 'https';
-  const res = await fetch(`${prot}://${host}/api/f1/races?season=${season}`, { next: { revalidate: 3600 } });
+  const res = await fetch(`${prot}://${host}/api/f1/races?season=${season}`, { next: { revalidate: SEASON_DATA_REVALIDATE_SECONDS } });
   if (!res.ok) return [];
   return res.json();
 }
@@ -31,7 +32,7 @@ export default async function CalendarPage(props: { searchParams: SearchParams }
           <Table>
             <TableHeader>
               <TableRow className="border-zinc-800 hover:bg-transparent">
-                <TableHead className="w-[80px] text-zinc-400">Round</TableHead>
+                <TableHead className="w-20 text-zinc-400">Round</TableHead>
                 <TableHead className="text-zinc-400">Grand Prix</TableHead>
                 <TableHead className="text-zinc-400">Circuit</TableHead>
                 <TableHead className="text-right text-zinc-400">Date</TableHead>

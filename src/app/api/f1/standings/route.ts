@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { SEASON_DATA_REVALIDATE_SECONDS } from '@/lib/cache';
 
 export async function GET(req: Request) {
   try {
@@ -6,7 +7,7 @@ export async function GET(req: Request) {
     const season = searchParams.get('season') || '2026';
 
     const res = await fetch(`https://api.jolpi.ca/ergast/f1/${season}/constructorstandings/?format=json`, {
-      next: { revalidate: 3600 }
+      next: { revalidate: SEASON_DATA_REVALIDATE_SECONDS }
     });
     
     if (!res.ok) {
