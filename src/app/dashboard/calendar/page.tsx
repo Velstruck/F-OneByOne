@@ -1,16 +1,7 @@
-import { headers } from "next/headers";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
-import { SEASON_DATA_REVALIDATE_SECONDS } from "@/lib/cache";
-
-async function getRaces(season: string) {
-  const host = (await headers()).get('host');
-  const prot = process.env.NODE_ENV === 'development' ? 'http' : 'https';
-  const res = await fetch(`${prot}://${host}/api/f1/races?season=${season}`, { next: { revalidate: SEASON_DATA_REVALIDATE_SECONDS } });
-  if (!res.ok) return [];
-  return res.json();
-}
+import { getRaces } from "@/lib/f1";
 
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>
 

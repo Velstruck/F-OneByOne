@@ -2,24 +2,7 @@ import { ConstructorPointsChart } from "@/components/dashboard/ConstructorPoints
 import { RecentRacesTable } from "@/components/dashboard/RecentRacesTable";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Trophy, Users, Flag } from "lucide-react";
-import { headers } from "next/headers";
-import { SEASON_DATA_REVALIDATE_SECONDS } from "@/lib/cache";
-
-async function getStandings(season: string) {
-  const host = (await headers()).get('host');
-  const prot = process.env.NODE_ENV === 'development' ? 'http' : 'https';
-  const res = await fetch(`${prot}://${host}/api/f1/standings?season=${season}`, { next: { revalidate: SEASON_DATA_REVALIDATE_SECONDS } });
-  if (!res.ok) return [];
-  return res.json();
-}
-
-async function getResults(season: string) {
-  const host = (await headers()).get('host');
-  const prot = process.env.NODE_ENV === 'development' ? 'http' : 'https';
-  const res = await fetch(`${prot}://${host}/api/f1/results?season=${season}`, { next: { revalidate: SEASON_DATA_REVALIDATE_SECONDS } });
-  if (!res.ok) return { races: [], accumulation: [] };
-  return res.json();
-}
+import { getConstructorStandings, getResults } from "@/lib/f1";
 
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>
 
@@ -27,8 +10,10 @@ export default async function DashboardPage(props: { searchParams: SearchParams 
   const searchParams = await props.searchParams;
   const season = typeof searchParams.season === 'string' ? searchParams.season : '2026';
 
-  const standings = await getStandings(season);
-  const resultsData = await getResults(season);
+  const [standings, resultsData] = await Promise.all([
+    getConstructorStandings(season),
+    getResults(season),
+  ]);
   
   const topConstructor = standings.length > 0 ? standings[0] : null;
 

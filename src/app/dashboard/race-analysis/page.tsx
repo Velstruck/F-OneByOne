@@ -1,33 +1,8 @@
-import { headers } from "next/headers";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LapPositionChart } from "@/components/dashboard/LapPositionChart";
 import RaceSelector from "@/components/dashboard/RaceSelector";
-import { SEASON_DATA_REVALIDATE_SECONDS } from "@/lib/cache";
-
-async function getRaces(season: string) {
-  const host = (await headers()).get('host');
-  const prot = process.env.NODE_ENV === 'development' ? 'http' : 'https';
-  const res = await fetch(`${prot}://${host}/api/f1/races?season=${season}`, { next: { revalidate: SEASON_DATA_REVALIDATE_SECONDS } });
-  if (!res.ok) return [];
-  return res.json();
-}
-
-async function getLaps(season: string, round: string) {
-  const host = (await headers()).get('host');
-  const prot = process.env.NODE_ENV === 'development' ? 'http' : 'https';
-  const res = await fetch(`${prot}://${host}/api/f1/laps?season=${season}&round=${round}`, { next: { revalidate: SEASON_DATA_REVALIDATE_SECONDS } });
-  if (!res.ok) return [];
-  return res.json();
-}
-
-async function getPitstops(season: string, round: string) {
-  const host = (await headers()).get('host');
-  const prot = process.env.NODE_ENV === 'development' ? 'http' : 'https';
-  const res = await fetch(`${prot}://${host}/api/f1/pitstops?season=${season}&round=${round}`, { next: { revalidate: SEASON_DATA_REVALIDATE_SECONDS } });
-  if (!res.ok) return [];
-  return res.json();
-}
+import { getLaps, getPitstops, getRaces } from "@/lib/f1";
 
 type PageProps = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -44,7 +19,7 @@ export default async function RaceAnalysisPage(props: PageProps) {
 
   const [laps, pitstops] = await Promise.all([
     getLaps(season, round),
-    getPitstops(season, round)
+    getPitstops(season, round),
   ]);
 
   return (

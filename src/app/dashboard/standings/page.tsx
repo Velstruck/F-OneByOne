@@ -1,23 +1,6 @@
-import { headers } from "next/headers";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { SEASON_DATA_REVALIDATE_SECONDS } from "@/lib/cache";
-
-async function getConstructorStandings(season: string) {
-  const host = (await headers()).get('host');
-  const prot = process.env.NODE_ENV === 'development' ? 'http' : 'https';
-  const res = await fetch(`${prot}://${host}/api/f1/standings?season=${season}`, { next: { revalidate: SEASON_DATA_REVALIDATE_SECONDS } });
-  if (!res.ok) return [];
-  return res.json();
-}
-
-async function getDriverStandings(season: string) {
-  const host = (await headers()).get('host');
-  const prot = process.env.NODE_ENV === 'development' ? 'http' : 'https';
-  const res = await fetch(`${prot}://${host}/api/f1/driver-standings?season=${season}`, { next: { revalidate: SEASON_DATA_REVALIDATE_SECONDS } });
-  if (!res.ok) return [];
-  return res.json();
-}
+import { getConstructorStandings, getDriverStandings } from "@/lib/f1";
 
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>
 

@@ -1,26 +1,9 @@
-import { headers } from "next/headers";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LapPositionChart } from "@/components/dashboard/LapPositionChart";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { SEASON_DATA_REVALIDATE_SECONDS } from "@/lib/cache";
-
-async function getLaps(season: string, round: string) {
-  const host = (await headers()).get('host');
-  const prot = process.env.NODE_ENV === 'development' ? 'http' : 'https';
-  const res = await fetch(`${prot}://${host}/api/f1/laps?season=${season}&round=${round}`, { next: { revalidate: SEASON_DATA_REVALIDATE_SECONDS } });
-  if (!res.ok) return [];
-  return res.json();
-}
-
-async function getPitstops(season: string, round: string) {
-  const host = (await headers()).get('host');
-  const prot = process.env.NODE_ENV === 'development' ? 'http' : 'https';
-  const res = await fetch(`${prot}://${host}/api/f1/pitstops?season=${season}&round=${round}`, { next: { revalidate: SEASON_DATA_REVALIDATE_SECONDS } });
-  if (!res.ok) return [];
-  return res.json();
-}
+import { getLaps, getPitstops } from "@/lib/f1";
 
 type PageProps = {
   params: Promise<{ round: string }>;
